@@ -1,5 +1,4 @@
 const { Schema, model } = require("mongoose");
-const dateFormat = require("../utils/dateFormat");
 const reactionSchema = require("./Reaction");
 
 // Schema to create Student model
@@ -13,8 +12,10 @@ const thoughtSchema = new Schema({
 
   createdAt: {
     type: Date,
-    default: Date.now(),
-    get: (createdAtVal) => dateFormat(createdAtVal),
+    default: Date.now,
+    get: function () {
+      return this.toLocaleString();
+    },
   },
 
   username: {
