@@ -21,3 +21,19 @@ router.route('/:studentId/assignments').post(addAssignment);
 router.route('/:studentId/assignments/:assignmentId').delete(removeAssignment);
 
 module.exports = router;
+
+
+
+
+// /api/users
+router
+    .route('/')
+    .get(getUsers)
+    .post(createUser);
+
+// /api/users/:userId
+router
+    .route('/:userId')
+    .get(getSingleUser)
+    .put(updateUser)
+    .delete(deleteUser);
