@@ -51,20 +51,16 @@ module.exports = {
           .catch(err => res.status(400).json(err));
   },
 
-  // delete user
-  deleteUser({ params }, res) {
-      User.findOneAndDelete({ _id: params.id })
-          .then(dbUserData => {
-              if (!dbUserData) {
-                  return res.status(404).json({ message: 'No user found with this id!' });
-              }
-
-              // bonus: return Thought.deleteMany({ _id: { $in: dbUserData.thoughts } })
-          })
-          .then(() => {
-              res.json({ message: 'user has been deleted.' });
-          })
-          .catch(err => res.status(400).json(err));
+  // delete user and associated thoughts
+  deleteUser(req, res) {
+    User.findOneAndDelete({ _id: req.params.userId })
+      .then((user) =>
+        !user
+          ? res.status(404).json({ message: 'No user with that ID' })
+          : Thought.deleteMany({ _id: { $in: user.thoughts} })
+      )
+      .then(() => res.json({ message: 'User and associated thoughts deleted!' }))
+      .catch((err) => res.status(500).json(err));
   },
 
   // add friend
