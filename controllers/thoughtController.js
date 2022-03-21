@@ -2,7 +2,7 @@ const { Thought, User} = require('../models')
 
 module.exports = {
    // get all thoughts
-   getAllThoughts(req, res) {
+   getThoughts(req, res) {
     Thought.find({})
         // .populate('reactionId')
         .then(dbThoughtData => res.json(dbThoughtData))
@@ -13,7 +13,7 @@ module.exports = {
 },
 
 // get one user by id
-getThoughtById({ params }, res) {
+getSingleThought({ params }, res) {
     Thought.findOne({ _id: params.thoughtId })
         .then(dbThoughtData => {
             if (!dbThoughtData) {
@@ -29,7 +29,7 @@ getThoughtById({ params }, res) {
 },
 
 // add thought to user
-addThought({ params, body }, res) {
+createThought({ params, body }, res) {
     console.log(body);
     Thought.create(body)
         .then(({ _id }) => {
