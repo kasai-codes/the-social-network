@@ -42,22 +42,41 @@ updateThought(req, res) {
       { $set: req.body },
       { runValidators: true, new: true }
     )
-      .then((dbThoughtData) => res.json(dbThoughtData))
-      .catch((err) => res.status(500).json(err));
+      .then((thought) =>
+        !thought
+          ? res.status(404).json({ message: 'No thot with this id!' })
+          : res.json(thought)
+      )
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json(err);
+      });
   },
 
 
 // remove thought
-deleteCourse(req, res) {
-    Course.findOneAndDelete({ _id: req.params.courseId })
-      .then((course) =>
-        !course
-          ? res.status(404).json({ message: 'No course with that ID' })
-          : Student.deleteMany({ _id: { $in: course.students } })
+removeThought(req, res) {
+    Thought.findOneAndRemove({ _id: req.params.thoughtId })
+      .then((thought) =>
+        !thought
+          ? res.status(404).json({ message: "No thought with this id!" })
+          : User.findOneAndUpdate(
+              
+              { username: thought.username },
+              { $pull: { thoughts: req.params.thoughtId } },
+              { new: true }
+            )
       )
-      .then(() => res.json({ message: 'Course and students deleted!' }))
+      .then((user) =>
+        !user
+          ? res
+              .status(404)
+              .json({ message: "Thought deleted but no user with this id!" })
+          : res.json({ message: "Thought successfully deleted!" })
+      )
       .catch((err) => res.status(500).json(err));
   },
+
 
 // add reaction
 addReaction({ params, body }, res) {

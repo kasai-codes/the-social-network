@@ -35,5 +35,5 @@ MongoDB is a popular choice for many social networks due to its speed with large
 
 ## Preview
 
-
+[Preview video!](https://www.loom.com/share/2c42c805107047d6b7586676801b2d70)
 
